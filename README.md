@@ -63,4 +63,4 @@ The first version of `mart_customer_segments` classified every customer with no 
 Olist Brazilian E-Commerce Public Dataset: 99,441 orders, 112,650 order items, 32,951 products, 2016–2018.
 
 ## Portfolio
-notion.site/Arushi · github.com/Arushi-dev
+[Portfolio](https://arushi-sharma.notion.site/Hey-there-I-am-Arushi-318d5a056b7080bea33edb8dc09f7d61) · [GitHub](https://github.com/Arushi-dev)
