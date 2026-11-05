@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: ecommerce
+    schema: main
+    description: "Raw Olist Brazilian e-commerce data"
+    tables:
+      - name: orders
+        description: "Customer orders"
+      - name: customers
+        description: "Customer information"
+      - name: order_items
+        description: "Line items within each order"
+      - name: products
+        description: "Product catalogue"

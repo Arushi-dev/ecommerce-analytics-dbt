@@ -1,0 +1,19 @@
+# dbt build output
+target/
+dbt_packages/
+logs/
+.user.yml
+
+# Local database and raw data (download from Kaggle, see README)
+*.duckdb
+*.duckdb.wal
+*.csv
+
+# Python
+__pycache__/
+venv/
+.venv/
+
+# Credentials: profiles.yml lives in ~/.dbt/, never in this repo
+profiles.yml
+.env
