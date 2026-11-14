@@ -46,6 +46,24 @@ Power BI report (3 pages) · Tableau dashboards
 - **Retention is the biggest opportunity:** 97% of customers with a delivered order bought only once. Repeat customers (2–4 orders) have an average lifetime value of R$305, against R$161 for one-time buyers.
 - **Top categories by revenue:** health & beauty, watches & gifts, and bed, bath & table.
 
+## Screenshots
+
+**dbt lineage:** four raw sources → four staging models → three marts.
+
+![dbt lineage graph](images/01_lineage.png)
+
+**Monthly revenue 2016–2018**, with the November 2017 Black Friday peak.
+
+![Monthly revenue trend](images/02_revenue_trend.png)
+
+**Top 10 product categories by revenue.**
+
+![Top 10 categories](images/03_top_categories.png)
+
+**Customer segments** after the segment fix: One-time 90,629 · Repeat 2,748 · No delivered orders 2,740 · Loyal 19.
+
+![Customer segments](images/04_customer_segments.png)
+
 ## Data quality fix
 The first version of `mart_customer_segments` classified every customer with no delivered order as "Loyal", because `total_orders = 0` fell through to the `else` branch of the segment `CASE`. That put 2,740 customers in the Loyal segment, which really has 19. A dedicated "No delivered orders" segment now handles them.
 
