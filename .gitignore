@@ -17,3 +17,7 @@ venv/
 # Credentials: profiles.yml lives in ~/.dbt/, never in this repo
 profiles.yml
 .env
+
+# CI test data and the CI profile are safe to commit (no credentials, tiny files)
+!ci/profiles.yml
+!ci/fixtures/*.csv

@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: mart_customer_segments
+    description: "One row per unique customer and state, with order count, lifetime value, segment and value tier"
+    columns:
+      - name: customer_segment
+        description: "No delivered orders, One-time (1), Repeat (2-4) or Loyal (5+)"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['No delivered orders', 'One-time', 'Repeat', 'Loyal']

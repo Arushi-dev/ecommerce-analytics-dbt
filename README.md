@@ -1,5 +1,7 @@
 # Brazilian E-Commerce Analytics Pipeline
 
+[![dbt CI](https://github.com/Arushi-dev/ecommerce-analytics-dbt/actions/workflows/dbt-ci.yml/badge.svg)](https://github.com/Arushi-dev/ecommerce-analytics-dbt/actions/workflows/dbt-ci.yml)
+
 An end-to-end analytics engineering project on the public Olist Brazilian E-Commerce dataset. It runs from raw CSVs through tested dbt models to Power BI and Tableau dashboards.
 
 **Business question:** How is revenue developing, which product categories drive it, and how many customers come back after their first order?
@@ -33,7 +35,18 @@ Power BI report (3 pages) · Tableau dashboards
 | `mart_customer_segments` | Mart | Orders and lifetime value per unique customer, with segment and value tier |
 
 ## Data quality
-10 dbt tests, all passing: `unique` on `order_id` and `product_id`, and `not_null` on all key identifier fields across the four staging models.
+12 dbt tests, all passing:
+- **10 schema tests** on the staging models: `unique` on `order_id` and `product_id`, and `not_null` on all key identifier fields.
+- **`accepted_values`** on `customer_segment`: only the four defined segments may appear.
+- **`assert_segment_matches_order_count`**, a business-logic test: every customer's segment must agree with their delivered order count. This is the test that would have caught the segment bug described below, which passed all the schema tests.
+
+## Continuous integration (CI)
+Every push to `main` and every pull request runs a GitHub Actions workflow ([`.github/workflows/dbt-ci.yml`](.github/workflows/dbt-ci.yml)):
+1. Starts a clean Linux machine and installs the pinned dbt versions.
+2. Loads a small hand-made test dataset ([`ci/fixtures/`](ci/fixtures/)) into a fresh DuckDB file. The rows cover the edge cases: a repeat customer, a customer with only a cancelled order, an order not yet delivered, a zero-price line and a product with no category.
+3. Runs `dbt build`, which builds every model and runs every test.
+
+If any model fails or any test fails, the run fails and the commit gets a red cross. The real Olist data is too large for Git, so CI checks the logic on the fixtures, and the full dataset is built locally.
 
 ## Power BI report
 - DAX measures: Total Revenue, Total Orders, Average Order Value, Month-on-Month Growth (`PREVIOUSMONTH`)
@@ -76,6 +89,8 @@ The first version of `mart_customer_segments` classified every customer with no 
 2. Load `olist_orders_dataset`, `olist_customers_dataset`, `olist_order_items_dataset` and `olist_products_dataset` into a DuckDB database as tables `orders`, `customers`, `order_items` and `products`.
 3. Point a `duckdb` profile named `ecommerce_analytics` in `~/.dbt/profiles.yml` at that database file.
 4. Run `dbt build`.
+
+To run the CI checks locally instead: `python ci/load_fixtures.py` then `dbt build --profiles-dir ci`.
 
 ## Dataset
 Olist Brazilian E-Commerce Public Dataset: 99,441 orders, 112,650 order items, 32,951 products, 2016–2018.

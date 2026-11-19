@@ -1,0 +1,10 @@
+# dbt connection settings used only by CI (GitHub Actions).
+# It points at a throwaway DuckDB file built from ci/fixtures/, so it holds
+# no passwords. Your real profile stays in ~/.dbt/profiles.yml on your laptop.
+ecommerce_analytics:
+  target: ci
+  outputs:
+    ci:
+      type: duckdb
+      path: ci/ci.duckdb
+      threads: 4
