@@ -1,0 +1,35 @@
+# Continuous integration for the dbt project.
+# Every push to main, and every pull request, starts a fresh Linux machine on
+# GitHub, installs dbt, loads the small test data in ci/fixtures/ into DuckDB,
+# and runs `dbt build` (all models + all tests). If any model fails to build or
+# any test fails, the run fails and GitHub shows a red cross on the commit.
+
+name: dbt CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:        # adds a "Run workflow" button on the Actions tab
+
+jobs:
+  dbt-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dbt (same versions as on my laptop)
+        run: pip install "dbt-core==1.11.11" "dbt-duckdb==1.11.1"
+
+      - name: Load test data into DuckDB
+        run: python ci/load_fixtures.py
+
+      - name: Build models and run all tests
+        run: dbt build --profiles-dir ci
