@@ -28,7 +28,7 @@ customer_orders as (
 select
     *,
     case
-        when total_orders = 0 then 'No delivered orders'
+
         when total_orders = 1 then 'One-time'
         when total_orders between 2 and 4 then 'Repeat'
         else 'Loyal'
